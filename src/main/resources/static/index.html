@@ -16,8 +16,33 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
         }
+        
+        /* ── Navbar ── */
+        nav {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 14, 26, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav .logo { font-weight: 700; font-size: 18px; color: white; display: flex; align-items: center; gap: 8px; }
+        nav .links { display: flex; gap: 24px; }
+        nav .links a { color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        nav .links a:hover { color: white; }
+        nav .btn-primary { 
+            background: linear-gradient(135deg, #6366f1, #8b5cf6); 
+            padding: 8px 16px; border-radius: 8px; color: white; 
+            font-size: 13px; font-weight: 600; text-decoration: none;
+        }
+
+        .main-container { width: 100%; max-width: 720px; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
         header { text-align: center; margin-bottom: 48px; }
         header .badge {
             display: inline-block;
@@ -196,18 +221,59 @@
             background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.3);
             border-radius: 10px; color: #f87171; font-size: 14px;
         }
-        footer { margin-top: 40px; color: #334155; font-size: 12px; }
+        /* ── Pricing Section ── */
+        .pricing-section { width: 100%; max-width: 900px; margin: 80px auto 40px; padding: 0 20px; text-align: center; }
+        .pricing-section h2 { font-size: 32px; font-weight: 700; margin-bottom: 12px; }
+        .pricing-section p { color: #64748b; font-size: 15px; margin-bottom: 40px; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+        .price-card { 
+            background: #0f1428; border: 1px solid rgba(99,102,241,.2); 
+            border-radius: 16px; padding: 32px 24px; text-align: left;
+            transition: transform 0.2s;
+        }
+        .price-card:hover { transform: translateY(-4px); border-color: #818cf8; }
+        .price-card.popular { background: rgba(99,102,241,0.05); border: 1px solid #6366f1; position: relative; }
+        .popular-badge { position: absolute; top: -12px; right: 20px; background: #6366f1; color: white; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+        .price-name { font-size: 18px; font-weight: 600; color: white; margin-bottom: 8px; }
+        .price-amount { font-size: 36px; font-weight: 700; color: white; margin-bottom: 24px; display: flex; align-items: baseline; gap: 4px; }
+        .price-amount span { font-size: 14px; font-weight: 500; color: #64748b; }
+        .price-features { list-style: none; margin-bottom: 32px; }
+        .price-features li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #cbd5e1; margin-bottom: 12px; }
+        .price-features li::before { content: '✓'; color: #10b981; font-weight: bold; }
+        .price-card .btn { 
+            display: block; width: 100%; text-align: center; padding: 12px; border-radius: 8px; 
+            font-size: 14px; font-weight: 600; text-decoration: none; border: 1px solid;
+            transition: all 0.2s;
+        }
+        .btn-outline { border-color: rgba(99,102,241,.4); color: #818cf8; }
+        .btn-outline:hover { background: rgba(99,102,241,.1); border-color: #818cf8; }
+        
+        #error.limit-reached { background: rgba(245, 158, 11, 0.1); border-color: #f59e0b; color: #f59e0b; }
+
+        footer { margin-top: 40px; color: #334155; font-size: 12px; padding-bottom: 40px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="badge">🩻 Demo — YOLOv11 + ONNX Runtime</div>
-        <h1>X-Ray Evaluator</h1>
-        <p>Subí una radiografía y el modelo de IA te dirá si es Normal o si detecta una Anomalía.</p>
-    </header>
+    <nav>
+        <div class="logo">🩻 Genia X-Rays</div>
+        <div class="links">
+            <a href="#app">La App</a>
+            <a href="/XRays_API_Docs.json" download>Cód Connect (API)</a>
+            <a href="#pricing">Precios</a>
+        </div>
+        <a href="mailto:contacto@genia.com" class="btn-primary">Contactar Ventas</a>
+    </nav>
 
-    <div class="card">
+    <div class="main-container" id="app">
+
+        <header>
+            <div class="badge">🩻 Demo — YOLOv11 + ONNX Runtime</div>
+            <h1>X-Ray Evaluator</h1>
+            <p>Subí una radiografía y el modelo de IA te dirá si es Normal o si detecta una Anomalía.</p>
+        </header>
+
+        <div class="card">
 
         <div id="dropZone">
             <div class="icon">🫁</div>
@@ -286,7 +352,52 @@
             </div>
         </div>
 
-        <button id="resetBtn">⟳ Analizar otra imagen</button>
+            <button id="resetBtn">⟳ Analizar otra imagen</button>
+        </div>
+    </div>
+
+    <!-- Pricing Section -->
+    <div class="pricing-section" id="pricing">
+        <h2>Planes Simple y Transparente</h2>
+        <p>Integrá la IA médica en tu sistema en menos de 5 minutos.</p>
+
+        <div class="pricing-grid">
+            <div class="price-card">
+                <div class="price-name">Testing</div>
+                <div class="price-amount">$0<span>/mes</span></div>
+                <ul class="price-features">
+                    <li>1 análisis de prueba</li>
+                    <li>Acceso al visual web</li>
+                    <li>Soporte comunitario</li>
+                </ul>
+                <a href="#app" class="btn btn-outline" onclick="window.scrollTo(0,0)">Probar ahora</a>
+            </div>
+
+            <div class="price-card popular">
+                <div class="popular-badge">Recomendado</div>
+                <div class="price-name">Desarrollador</div>
+                <div class="price-amount">$49<span>/pack</span></div>
+                <ul class="price-features">
+                    <li>1.000 Tokens (análisis)</li>
+                    <li>API Key garantizada</li>
+                    <li>Descarga de colección Postman</li>
+                    <li>Soporte por email 24/7</li>
+                </ul>
+                <a href="mailto:contacto@genia.com" class="btn" style="background:#6366f1;color:white;border:none;">Comprar Tokens</a>
+            </div>
+
+            <div class="price-card">
+                <div class="price-name">Clínicas</div>
+                <div class="price-amount">A medida</div>
+                <ul class="price-features">
+                    <li>Análisis ilimitados</li>
+                    <li>SLA de 99.9%</li>
+                    <li>Motor local dedicado</li>
+                    <li>Dashboard e integración HIS</li>
+                </ul>
+                <a href="mailto:contacto@genia.com" class="btn btn-outline">Hablar con Ventas</a>
+            </div>
+        </div>
     </div>
 
     <footer>Powered by Spring Boot + ONNX Runtime · YOLOv11-cls</footer>
@@ -374,7 +485,12 @@
                 });
             }
 
+            if (resp.status === 429) {
+                showError('⚠️ Has alcanzado tu límite de 1 prueba gratuita. Por favor contactanos para comprar Tokens y seguir operando.', true);
+                return;
+            }
             if (!resp.ok) { showError(`Error del servidor: ${resp.status}`); return; }
+            
             const data = await resp.json();
             showResult(data, Date.now() - startTime);
 
@@ -426,8 +542,13 @@
         document.getElementById('barFill').style.width = '0%';
     }
 
-    function showError(msg) { errorDiv.textContent = `⚠️ ${msg}`; errorDiv.style.display = 'block'; }
-    function hideError()    { errorDiv.style.display = 'none'; }
+    function showError(msg, isLimit = false) { 
+        errorDiv.textContent = msg; 
+        errorDiv.style.display = 'block'; 
+        if (isLimit) { errorDiv.classList.add('limit-reached'); } 
+        else { errorDiv.classList.remove('limit-reached'); }
+    }
+    function hideError() { errorDiv.style.display = 'none'; errorDiv.classList.remove('limit-reached'); }
 
     function toBase64(file) {
         return new Promise((res, rej) => {

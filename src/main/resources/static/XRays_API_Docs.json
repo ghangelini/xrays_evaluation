@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "XRays Evaluation API",
+		"description": "Colección para probar la API de evaluación de radiografías.\n\n**Endpoints disponibles:**\n- `POST /api/xrays/evaluate` - Imagen en Base64 (JPEG, PNG, etc.)\n- `POST /api/xrays/evaluate/pdf` - Archivo PDF como multipart\n- `POST /api/xrays/evaluate/pdf/base64` - PDF en Base64\n\n**Para convertir imagen a Base64 (PowerShell):**\n```\n[Convert]::ToBase64String([IO.File]::ReadAllBytes('ruta\\imagen.jpg'))\n```\n\n**Para convertir PDF a Base64 (PowerShell):**\n```\n[Convert]::ToBase64String([IO.File]::ReadAllBytes('ruta\\archivo.pdf'))\n```",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "imageBase64",
+			"value": "PASTE_IMAGE_BASE64_HERE",
+			"type": "string"
+		},
+		{
+			"key": "pdfBase64",
+			"value": "PASTE_PDF_BASE64_HERE",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Evaluate X-Ray (Imagen en Base64)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"image_base64\": \"{{imageBase64}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/xrays/evaluate",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "xrays", "evaluate"]
+				},
+				"description": "Evalúa una radiografía enviada como imagen (JPEG, PNG) codificada en Base64.\n\n**Cómo obtener el Base64 de tu imagen:**\n```powershell\n[Convert]::ToBase64String([IO.File]::ReadAllBytes('C:\\ruta\\a\\imagen.jpg'))\n```\nLuego pegá el resultado como valor de la variable `imageBase64`."
+			},
+			"response": [
+				{
+					"name": "200 - Normal",
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [{"key": "Content-Type", "value": "application/json"}],
+					"body": "{\n    \"label\": \"Normal\",\n    \"confidence\": 0.9999959468841553,\n    \"classId\": 1,\n    \"modelUsed\": \"YOLO11m-cls (ONNX)\"\n}"
+				},
+				{
+					"name": "200 - Anomaly",
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [{"key": "Content-Type", "value": "application/json"}],
+					"body": "{\n    \"label\": \"Anomaly\",\n    \"confidence\": 0.9876543210,\n    \"classId\": 0,\n    \"modelUsed\": \"YOLO11m-cls (ONNX)\"\n}"
+				}
+			]
+		},
+		{
+			"name": "2. Evaluate X-Ray (PDF como archivo)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": [],
+							"description": "Seleccioná tu archivo PDF con la radiografía"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/xrays/evaluate/pdf",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "xrays", "evaluate", "pdf"]
+				},
+				"description": "Evalúa una radiografía enviada directamente como archivo PDF.\n\n**Cómo usarlo en Postman:**\n1. Seleccioná `Body` → `form-data`.\n2. En el campo `file`, seleccioná `File` como tipo.\n3. Hacé clic en `Select Files` y buscá tu PDF.\n4. Enviá el request.\n\n⚡ **Este es el endpoint más fácil de usar desde Postman para archivos PDF.**"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Evaluate X-Ray (PDF en Base64)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pdf_base64\": \"{{pdfBase64}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/xrays/evaluate/pdf/base64",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "xrays", "evaluate", "pdf", "base64"]
+				},
+				"description": "Evalúa una radiografía enviada como PDF codificado en Base64.\n\n**Cómo obtener el Base64 de tu PDF:**\n```powershell\n[Convert]::ToBase64String([IO.File]::ReadAllBytes('C:\\ruta\\a\\archivo.pdf'))\n```\nLuego pegá el resultado como valor de la variable `pdfBase64`.\n\n💡 Útil para integraciones programáticas donde ya se recibe el PDF en Base64."
+			},
+			"response": []
+		}
+	]
+}
